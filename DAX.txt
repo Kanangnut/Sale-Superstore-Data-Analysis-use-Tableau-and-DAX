@@ -1,0 +1,82 @@
+Total CY Profit
+IF Year([Order Date])= {MAX(YEAR([Order Date]))} THEN [Profit] END
+
+Total CY Qty
+IF Year([Order Date])= {MAX(YEAR([Order Date]))} THEN [Quantity] END
+
+Total CY Sales
+IF Year([Order Date])= {MAX(YEAR([Order Date]))} THEN [Sales] END
+
+Total PY Profit
+IF Year([Order Date])= {MAX(YEAR([Order Date]))}-1 THEN [Profit] END
+
+Total PY Qty
+IF Year([Order Date])= {MAX(YEAR([Order Date]))}-1 THEN [Quantity] END
+
+Total PY Sales
+IF YEAR([Order Date])= {MAX(YEAR([Order Date]))}-1 THEN [Sales] END
+
+Min max month: Sales
+IF SUM([Total CY Sales])=WINDOW_MAX(SUM([Total CY Sales])) THEN SUM([Total CY Sales])
+ELSEIF SUM([Total CY Sales])=WINDOW_MIN(SUM([Total CY Sales])) THEN SUM([Total CY Sales])
+ELSE NULL
+END
+
+Min max month: Profit
+IF SUM([Total CY Profit])=WINDOW_MAX(SUM([Total CY Profit])) THEN SUM([Total CY Profit])
+ELSEIF SUM([Total CY Profit])=WINDOW_MIN(SUM([Total CY Profit])) THEN SUM([Total CY Profit])
+ELSE NULL
+END
+
+Min max month: Qty
+IF SUM([Total CY Qty])=WINDOW_MAX(SUM([Total CY Qty])) THEN SUM([Total CY Qty])
+ELSEIF SUM([Total CY Qty])=WINDOW_MIN(SUM([Total CY Qty])) THEN SUM([Total CY Qty])
+ELSE NULL
+END
+
+Avg Sales State wist
+{ FIXED[State/Province]:AVG([Total CY Sales])}
+
+Avg Sales Overall
+{FIXED : AVG(IF YEAR([Order Date])={MAX(YEAR([Order Date]))} THEN [Total CY Sales]END)}
+
+Avg Profit Overall
+{FIXED : AVG(IF YEAR([Order Date])={MAX(YEAR([Order Date]))} THEN [Total CY Profit]END)}
+
+YOY Profit
+(SUM([Total CY Profit]) - SUM([Total PY Profit]))/SUM([Total PY Profit])
+
+YOY Profit Indicator
+IF [YOY Profit]>0 THEN "▲" ELSE "▼" END
+
+YOY Qty
+(SUM([Total CY Qty]) - SUM([Total PY Qty]))/SUM([Total PY Qty])
+
+YOY Qty Indicator
+IF [YOY Qty]>0 THEN "▲" ELSE "▼" END
+
+YOY Sales
+(SUM([Total CY Sales]) - SUM([Total PY Sales]))/SUM([Total PY Sales])
+
+YOY Sales Indicator
+IF [YOY Sales]>0 THEN "▲" ELSE "▼" END
+
+Avg Profit State wist
+{ FIXED[State/Province]:AVG([Total CY Profit])}
+
+Avg Sales State wist
+{ FIXED[State/Province]:AVG([Total CY Sales])}
+
+Dynamic Measure
+CASE [Select Measure]
+WHEN 'Total CY Sales' THEN[Total CY Sales]
+WHEN 'Total CY Profit' THEN[Total CY Profit]
+WHEN 'Total CY Qty' THEN[Total CY Qty]
+END
+
+
+
+
+
+
+
